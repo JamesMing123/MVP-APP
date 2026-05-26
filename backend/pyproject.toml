@@ -1,0 +1,25 @@
+[project]
+name = "nba-super-backend"
+version = "0.1.0"
+description = "FastAPI monolith for NBA Super MVP"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115.6",
+  "uvicorn[standard]>=0.32.1",
+  "sqlalchemy>=2.0.36",
+  "psycopg[binary]>=3.2.3",
+  "pydantic-settings>=2.6.1",
+  "python-jose[cryptography]>=3.3.0",
+  "passlib[bcrypt]>=1.7.4",
+  "email-validator>=2.2.0",
+  "python-multipart>=0.0.17",
+  "redis>=5.2.1",
+  "openai>=1.57.0",
+]
+
+[dependency-groups]
+dev = [
+  "ruff>=0.8.3",
+  "pytest>=8.3.4",
+  "httpx>=0.28.1",
+]
