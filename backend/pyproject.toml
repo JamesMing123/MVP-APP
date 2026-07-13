@@ -15,11 +15,14 @@ dependencies = [
   "python-multipart>=0.0.17",
   "redis>=5.2.1",
   "openai>=1.57.0",
+  "httpx>=0.28.1",
+  "pymilvus>=3.0.0",
+  "myapplication>=0.1.0",
+  "the-new-hotness>=1.4.1",
 ]
 
 [dependency-groups]
 dev = [
   "ruff>=0.8.3",
   "pytest>=8.3.4",
-  "httpx>=0.28.1",
 ]

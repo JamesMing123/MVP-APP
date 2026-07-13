@@ -8,7 +8,8 @@ class AiReportScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: const [
-        Text('AI 战报', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+        Text('AI 战报',
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
         SizedBox(height: 16),
         Card(
           child: ListTile(

@@ -71,3 +71,25 @@ AI report:
 ```text
 POST /api/v1/ai/matches/1/report
 ```
+
+## Import Real NBA Official Data
+
+The project does not seed fake players or fake games. Use the official NBA data sync script after PostgreSQL is running:
+
+If your database already exists, apply the schema migration first:
+
+```powershell
+docker compose exec -T postgres psql -U nba -d nba_super -f /dev/stdin < D:\NBA-APP\infra\postgres\migrations\002_official_nba_data.sql
+```
+
+```powershell
+cd D:\NBA-APP\backend
+uv run python scripts\sync_nba_official_data.py
+```
+
+Data sources:
+
+- Active NBA players: `https://stats.nba.com/stats/commonallplayers`
+- Retired superstar lookup: `https://stats.nba.com/stats/commonallplayers`
+- Today's official scoreboard: `https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json`
+- Player headshots: `https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png`

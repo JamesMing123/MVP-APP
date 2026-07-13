@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS teams (
   id BIGSERIAL PRIMARY KEY,
+  nba_official_id BIGINT UNIQUE,
   name VARCHAR(120) NOT NULL UNIQUE,
   abbreviation VARCHAR(10) NOT NULL UNIQUE,
   city VARCHAR(120),
@@ -22,14 +23,18 @@ CREATE TABLE IF NOT EXISTS teams (
 
 CREATE TABLE IF NOT EXISTS players (
   id BIGSERIAL PRIMARY KEY,
+  nba_official_id BIGINT UNIQUE,
   team_id BIGINT REFERENCES teams(id),
   name VARCHAR(120) NOT NULL,
   avatar_url VARCHAR(500),
   position VARCHAR(32),
-  jersey_number VARCHAR(10)
+  jersey_number VARCHAR(10),
+  is_active INTEGER NOT NULL DEFAULT 1,
+  data_source VARCHAR(80)
 );
 
 CREATE INDEX IF NOT EXISTS ix_players_name ON players(name);
+CREATE INDEX IF NOT EXISTS ix_players_nba_official_id ON players(nba_official_id);
 
 CREATE TABLE IF NOT EXISTS matches (
   id BIGSERIAL PRIMARY KEY,
@@ -42,6 +47,7 @@ CREATE TABLE IF NOT EXISTS matches (
   period VARCHAR(32),
   clock VARCHAR(32),
   external_id VARCHAR(120) UNIQUE,
+  data_source VARCHAR(80),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -125,13 +131,5 @@ CREATE TABLE IF NOT EXISTS ai_reports (
 
 CREATE INDEX IF NOT EXISTS ix_ai_reports_match_id ON ai_reports(match_id);
 
-INSERT INTO teams (id, name, abbreviation, city, conference)
-VALUES
-  (1, 'Los Angeles Lakers', 'LAL', 'Los Angeles', 'West'),
-  (2, 'Boston Celtics', 'BOS', 'Boston', 'East')
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO matches (id, home_team_id, away_team_id, start_time, status, home_score, away_score, period, clock, external_id)
-VALUES
-  (1, 1, 2, now() + interval '1 hour', 'live', 78, 74, 'Q3', '05:21', 'demo-lal-bos-001')
-ON CONFLICT (id) DO NOTHING;
+-- Real NBA seed data is imported by backend/scripts/sync_nba_official_data.py.
+-- This schema intentionally avoids fake demo games or fabricated players.

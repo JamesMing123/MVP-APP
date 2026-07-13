@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1 import ai, auth, community, matches
 from app.core.config import settings
+from app.core.schema_upgrades import ensure_schema_upgrades
 from app.ws.live_scores import router as live_score_ws_router
 
 
@@ -21,6 +22,10 @@ def create_app() -> FastAPI:
     app.include_router(community.router, prefix="/api/v1/community", tags=["community"])
     app.include_router(ai.router, prefix="/api/v1/ai", tags=["ai"])
     app.include_router(live_score_ws_router)
+
+    @app.on_event("startup")
+    def on_startup() -> None:
+        ensure_schema_upgrades()
 
     @app.get("/health")
     def health() -> dict[str, str]:

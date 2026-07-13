@@ -10,6 +10,7 @@ class Team(Base):
     __tablename__ = "teams"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    nba_official_id: Mapped[int | None] = mapped_column(Integer, unique=True, index=True)
     name: Mapped[str] = mapped_column(String(120), unique=True)
     abbreviation: Mapped[str] = mapped_column(String(10), unique=True)
     city: Mapped[str | None] = mapped_column(String(120))
@@ -21,11 +22,14 @@ class Player(Base):
     __tablename__ = "players"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    nba_official_id: Mapped[int | None] = mapped_column(Integer, unique=True, index=True)
     team_id: Mapped[int | None] = mapped_column(ForeignKey("teams.id"))
     name: Mapped[str] = mapped_column(String(120), index=True)
     avatar_url: Mapped[str | None] = mapped_column(String(500))
     position: Mapped[str | None] = mapped_column(String(32))
     jersey_number: Mapped[str | None] = mapped_column(String(10))
+    is_active: Mapped[int] = mapped_column(Integer, default=1)
+    data_source: Mapped[str | None] = mapped_column(String(80))
 
 
 class Match(Base):
@@ -41,6 +45,7 @@ class Match(Base):
     period: Mapped[str | None] = mapped_column(String(32))
     clock: Mapped[str | None] = mapped_column(String(32))
     external_id: Mapped[str | None] = mapped_column(String(120), unique=True)
+    data_source: Mapped[str | None] = mapped_column(String(80))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
